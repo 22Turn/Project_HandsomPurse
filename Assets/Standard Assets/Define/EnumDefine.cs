@@ -6,10 +6,11 @@
     LanguageCount,
 }
 
-public enum Enum_Page
+public enum ENUM_Page
 {
-    Mission,
-    MonsterList,
+    Main,
+    Calculator_Get,
+    Calculator_Pay,
 
     Count,
 };

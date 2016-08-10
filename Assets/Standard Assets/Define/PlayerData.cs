@@ -2,20 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerData : MonoBehaviour {
+public class PlayerData : MonoBehaviour
+{
+    public static float fMoney = 0;
 
-    static public PlayerData pthis = null;
-
-    public int iMoney = 0;
-    public int iSoul = 0;
-    public int iPrestige = 0;
-    public int iPetCount = 0;
-
-    public PetData[] pPet = null;
-    public List<MissionData> pMission = new List<MissionData>();
     // ------------------------------------------------------------------
-    void Awake()
+    public static float GetMoney()
     {
-        pthis = this;
+        return fMoney;
+    }
+    // ------------------------------------------------------------------
+    public static bool AddMoney(float fValue)
+    {
+        fMoney = fMoney + fValue;
+        return true;
     }
 }

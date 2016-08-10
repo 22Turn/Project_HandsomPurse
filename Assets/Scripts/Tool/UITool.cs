@@ -12,6 +12,13 @@ public class UITool : MonoBehaviour
         pthis = this;
     }
     // ------------------------------------------------------------------
+    public GameObject CreatePanel(string Name)
+    {
+        if (Resources.Load("Prefab/Panel/" + Name) == null)
+            Debug.Log("Prefab/Panel/" + Name + " is NULL");
+        return NGUITools.AddChild(gameObject, Resources.Load("Prefab/Panel/" + Name) as GameObject);
+    }
+    // ------------------------------------------------------------------
     public GameObject CreateUI(GameObject Parent, string Path)
     {
 		if(Resources.Load(Path) == null)
