@@ -5,5 +5,7 @@
     public const string szDBFLanguage = "Language"; // 語言dbf名稱
     public const string szDBFMonster = "Monster"; // 怪物dbf名稱
     public const string szDBFMission = "Mission"; // 任務dbf名稱
-    
+
+    public const int iMaxCalculatorNum = 13; // 顯示數字上限.
+
 }

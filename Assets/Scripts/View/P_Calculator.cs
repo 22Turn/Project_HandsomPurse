@@ -8,18 +8,17 @@ public class P_Calculator : MonoBehaviour
 
     public UILabel Lb_Title = null;
     public UILabel Lb_TotalNum = null;
+    public UILabel Lb_OK = null;
 
-    public double dTempNum = 0;
     public double dTotal = 0;
 
     public float[] registers = new float[2];//2 registers
-    public string currentNumber = "0";
-    public int calcScreenFontSize = 27;
-    public int operationFontSize = 15;
+    public string currentNum = "0";
     public string currentOperationToPerform = "";
-    public int maxDigits = 11;
     public bool isFirst = true;
     public bool shouldClearScreen = false;
+
+    bool bIsOKBtn = true;
 
     void Awake()
     {
@@ -40,44 +39,56 @@ public class P_Calculator : MonoBehaviour
                 Lb_Title.text = "Page Error";
                 break;
         }
+
+        ClearCalcData();
     }
 
     // 更新顯示.
     void Refresh()
     {
-        Lb_TotalNum.text = dTotal.ToString("#,0");
+        dTotal = double.Parse(currentNum);
+
+        if (currentNum.Contains("."))
+            Lb_TotalNum.text = dTotal.ToString("C2").Remove(0,1);
+        else
+            Lb_TotalNum.text = dTotal.ToString("N0");
     }
 
     // 增加數字.
     public void AddendNumber(string s)
     {
-        if ((currentNumber == "0") || shouldClearScreen)
-            currentNumber = (s == ".") ? "0." : s;
-        else
-            if (currentNumber.Length < maxDigits)
-            currentNumber += s;
+        // 不可以按兩次點.
+        if (s == "." && currentNum.Contains("."))
+            return;
+
+        if ((currentNum == "0") || shouldClearScreen)
+            currentNum = (s == ".") ? "0." : s;
+        else 
+            if (currentNum.Length < GameDefine.iMaxCalculatorNum)
+                currentNum += s;
 
         if (shouldClearScreen)
             shouldClearScreen = false;
+
         StoreCurrentNumberInReg(isFirst ? 0 : 1);
-    }
-
-    // 增加數字.
-    public void SetNum(double dNum)
-    {
-        if (Lb_TotalNum.text.Length >= 15)
-            return;
-
-        if(dTotal == 0)
-            dTotal = dNum;
-        else
-            dTotal = double.Parse(dTotal.ToString() + dNum);
 
         Refresh();
     }
-    
+
+    // 刪除數字.
+    public void delendNumber()
+    {
+        currentNum = currentNum.Remove(currentNum.Length - 1, 1);
+
+        StoreCurrentNumberInReg(isFirst ? 0 : 1);
+        Refresh();
+    }
+
     public void OperatorPressed(string op)
     {
+        // 切換OK為等於.
+        SwitchOK(false);
+
         StoreCurrentNumberInReg(0);
         isFirst = false;
         shouldClearScreen = true;
@@ -86,28 +97,36 @@ public class P_Calculator : MonoBehaviour
 
     void StoreCurrentNumberInReg(int regNumber)
     {
-        registers[regNumber] = float.Parse(currentNumber, CultureInfo.InvariantCulture.NumberFormat);
+        registers[regNumber] = float.Parse(currentNum, CultureInfo.InvariantCulture.NumberFormat);
     }
 
-    void PerformOperation()
+    public void PerformOperation()
     {
+        if (bIsOKBtn)
+        {
+            SysMain.SetTempNumber(dTotal);
+            UITool.pthis.CreatePanel("P_Tag");
+            Destroy(gameObject);
+            return;
+        }
+
         switch (currentOperationToPerform)
         {
             case "+":
-                if (currentNumber != "NaN")
-                    currentNumber = (registers[0] + registers[1]).ToString();
+                if (currentNum != "NaN")
+                    currentNum = (registers[0] + registers[1]).ToString();
                 break;
             case "-":
-                if (currentNumber != "NaN")
-                    currentNumber = (registers[0] - registers[1]).ToString();
+                if (currentNum != "NaN")
+                    currentNum = (registers[0] - registers[1]).ToString();
                 break;
             case "x":
-                if (currentNumber != "NaN")
-                    currentNumber = (registers[0] * registers[1]).ToString();
+                if (currentNum != "NaN")
+                    currentNum = (registers[0] * registers[1]).ToString();
                 break;
             case "/":
-                if (currentNumber != "NaN")
-                    currentNumber = (registers[1] != 0) ? (registers[0] / registers[1]).ToString() : "NaN";
+                if (currentNum != "NaN")
+                    currentNum = (registers[1] != 0) ? (registers[0] / registers[1]).ToString() : "NaN";
                 break;
             case "":
                 break;
@@ -118,16 +137,32 @@ public class P_Calculator : MonoBehaviour
         StoreCurrentNumberInReg(0);
         isFirst = true;
         shouldClearScreen = true;
-    }
 
+        // 切換OK為等於.
+        SwitchOK(true);
+
+        Refresh();
+    }
+    
     // 清空數字.
     public void ClearCalcData()
     {
+        SwitchOK(true);
         isFirst = true;
         shouldClearScreen = true;
         currentOperationToPerform = "";
-        currentNumber = "0";
+        currentNum = "0";
+        Lb_TotalNum.text = "0";
         for (int i = 0; i < registers.Length; i++)
             registers[i] = 0;
+    }
+
+    public void SwitchOK(bool bIsOK)
+    {
+        bIsOKBtn = bIsOK;
+        if (bIsOK)
+            Lb_OK.text = "OK";
+        else
+            Lb_OK.text = "=";
     }
 }

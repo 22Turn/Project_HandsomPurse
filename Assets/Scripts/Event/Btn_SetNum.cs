@@ -22,24 +22,17 @@ public class Btn_SetNum : MonoBehaviour
                 P_Calculator.pthis.OperatorPressed("x");
                 break;
             case "=":
+                P_Calculator.pthis.PerformOperation();
+                break;
+            case "AC":
+                P_Calculator.pthis.ClearCalcData();
                 break;
             case "C":
-                P_Calculator.pthis.ClearCalcData();
+                P_Calculator.pthis.delendNumber();
                 break;
             default:
                 P_Calculator.pthis.AddendNumber(sType);
                 break;
         }
-        /*
-        if (GUI.Button(new Rect(61, 70, 47, 30), "+/-"))
-        {
-            if (currentNumber != "0")
-            {
-                if (currentNumber[0] != '-')
-                    currentNumber = currentNumber.Insert(0, "-");
-                else
-                    currentNumber = currentNumber.Remove(0, 1);
-            }
-        }*/
     }
 }
