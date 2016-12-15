@@ -4,10 +4,16 @@ using System.Collections.Generic;
 
 public class P_GetTag : MonoBehaviour
 {
+    static public P_GetTag pGetTag = null;
     public List<GameObject> pGObjTag = new List<GameObject>();
 
     int iStartX = -392;
     int iStartY = 72;
+
+    void Awake()
+    {
+        pGetTag = this;
+    }
 
     void Start()
     {

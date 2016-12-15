@@ -7,7 +7,11 @@ public class Btn_AddGetTag : MonoBehaviour
 
 	void OnClick()
     {
-        PlayerData.AddTag(pInput.value);
+        PlayerData.AddTag(pInput.value, (int)SysMain.Now_Page);
+
+        if (P_GetTag.pGetTag != null)
+            P_GetTag.pGetTag.Refresh();
+
         Destroy(gameObject.transform.parent.gameObject);
     }
 }

@@ -11,6 +11,10 @@ public class UITool : MonoBehaviour
     {
         pthis = this;
     }
+    void Start()
+    {
+        //PlayerPrefs.DeleteAll();
+    }
     // ------------------------------------------------------------------
     public GameObject CreatePanel(string Name)
     {
