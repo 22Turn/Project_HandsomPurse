@@ -9,6 +9,7 @@ public class PlayerData : MonoBehaviour
     public static string[] strTag = new string[50];
 
     public static SaveData<C_SaveTag> TagDatas = new SaveData<C_SaveTag>();
+    public static SaveData<C_SaveWay> WayDatas = new SaveData<C_SaveWay>();
     // ------------------------------------------------------------------
     private void Start()
     {
@@ -111,6 +112,17 @@ public class PlayerData : MonoBehaviour
         public override string ToString()
         {
             return "TagID" + TagID;
+        }
+    }
+
+    public class C_SaveWay : Save
+    {
+        public int WayID = 0;
+        public int WayType = 1; // 1.收入 2.支出
+
+        public override string ToString()
+        {
+            return "WayID" + WayID;
         }
     }
 }
